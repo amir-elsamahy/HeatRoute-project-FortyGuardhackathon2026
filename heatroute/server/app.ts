@@ -49,10 +49,10 @@ app.use(express.json({ limit: '1mb' }));
 // API Routes
 // ---------------------------------------------------------------------------
 
-app.use('/api/analyze', analyzeRouter);
-app.use('/api/geocode', geocodeRouter);
+app.use(['/api/analyze', '/analyze'], analyzeRouter);
+app.use(['/api/geocode', '/geocode'], geocodeRouter);
 
-app.get('/api/health', (_req: Request, res: Response) => {
+const handleHealth = (_req: Request, res: Response) => {
   res.status(200).json({
     status: 'ok',
     service: 'HeatRoute API',
@@ -60,7 +60,9 @@ app.get('/api/health', (_req: Request, res: Response) => {
     fortyguardConfigured: Boolean(process.env.FORTYGUARD_API_KEY),
     time: new Date().toISOString(),
   });
-});
+};
+
+app.get(['/api/health', '/health', '/api', '/'], handleHealth);
 
 // ---------------------------------------------------------------------------
 // Error Handling Middleware
