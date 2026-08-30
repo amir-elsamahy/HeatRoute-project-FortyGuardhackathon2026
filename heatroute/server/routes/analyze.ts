@@ -4,14 +4,14 @@
  */
 
 import { Router, Request, Response } from 'express';
-import { CONFIG } from '@server/config';
-import { AnalyzeRequestSchema, type AnalyzeResponse } from '@server/services/fortyguard/schemas';
-import { fetchCandidateRoutes, type CandidateRoute } from '@server/services/routing/osrm';
-import { buildCorridorPolygon, getDefaultAnalysisDateTime } from '@server/services/routing/sampling';
-import { analyseCorridorHeat, AnalysisRequestBudget } from '@server/services/fortyguard/client';
-import { scoreRoutes, type RouteMetrics } from '@server/services/scoring/heatScore';
-import { rankRoutes } from '@server/services/scoring/ranking';
-import { toUserFacingMessage, FortyGuardError } from '@server/services/fortyguard/errors';
+import { CONFIG } from '../config';
+import { AnalyzeRequestSchema, type AnalyzeResponse } from '../services/fortyguard/schemas';
+import { fetchCandidateRoutes, type CandidateRoute } from '../services/routing/osrm';
+import { buildCorridorPolygon, getDefaultAnalysisDateTime } from '../services/routing/sampling';
+import { analyseCorridorHeat, AnalysisRequestBudget } from '../services/fortyguard/client';
+import { scoreRoutes, type RouteMetrics } from '../services/scoring/heatScore';
+import { rankRoutes } from '../services/scoring/ranking';
+import { toUserFacingMessage, FortyGuardError } from '../services/fortyguard/errors';
 
 const router = Router();
 

@@ -7,11 +7,11 @@
  * and validates the resulting AOI area against FortyGuard limits.
  */
 
-import { CONFIG } from '@server/config';
+import { CONFIG } from '../../config';
 import type { LatLng, RouteGeometry } from './osrm';
-import type { RawHeatmapRequest } from '@server/services/fortyguard/types';
+import type { RawHeatmapRequest } from '../fortyguard/types';
 import { validateAoiArea } from './area';
-import { FortyGuardError } from '@server/services/fortyguard/errors';
+import { FortyGuardError } from '../fortyguard/errors';
 
 const METERS_PER_DEGREE_LAT = 111132.954;
 

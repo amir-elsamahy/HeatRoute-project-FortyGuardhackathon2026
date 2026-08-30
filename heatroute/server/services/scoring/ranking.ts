@@ -4,7 +4,7 @@
  */
 
 import type { ScoredRoute } from './heatScore';
-import type { CandidateRoute } from '@server/services/routing/osrm';
+import type { CandidateRoute } from '../routing/osrm';
 
 export interface TradeoffSummary {
   avgTempDiffCelsius: number;

@@ -3,7 +3,7 @@
  * Fetches real candidate road routes between two geographic locations.
  */
 
-import { CONFIG } from '@server/config';
+import { CONFIG } from '../../config';
 
 export interface LatLng {
   lat: number;

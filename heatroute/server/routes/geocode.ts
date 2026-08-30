@@ -4,8 +4,8 @@
  */
 
 import { Router, Request, Response } from 'express';
-import { CONFIG } from '@server/config';
-import { GeocodeQuerySchema } from '@server/services/fortyguard/schemas';
+import { CONFIG } from '../config';
+import { GeocodeQuerySchema } from '../services/fortyguard/schemas';
 
 const router = Router();
 

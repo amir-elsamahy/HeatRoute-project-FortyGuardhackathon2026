@@ -9,7 +9,7 @@
  * - Hard request budget tracking per analysis (MAX_FORTYGUARD_REQUESTS_PER_ANALYSIS)
  */
 
-import { CONFIG } from '@server/config';
+import { CONFIG } from '../../config';
 import {
   FortyGuardError,
   FortyGuardAuthError,

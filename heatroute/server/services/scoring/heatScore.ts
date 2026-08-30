@@ -22,8 +22,8 @@
  *   This score is a HeatRoute comparative decision metric, not an occupational health standard.
  */
 
-import { CONFIG } from '@server/config';
-import type { HeatObservation } from '@server/services/fortyguard/types';
+import { CONFIG } from '../../config';
+import type { HeatObservation } from '../fortyguard/types';
 
 export interface RouteMetrics {
   routeId: string;

@@ -3,7 +3,7 @@
  */
 
 import { z } from 'zod';
-import { CONFIG } from '@server/config';
+import { CONFIG } from '../../config';
 
 // ---------------------------------------------------------------------------
 // 1. Geographic Coordinate Schema (With US Prefilter Validation)

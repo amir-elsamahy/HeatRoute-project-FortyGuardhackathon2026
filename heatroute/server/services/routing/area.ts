@@ -3,7 +3,7 @@
  * Used to ensure route corridor polygons do not exceed the configured FortyGuard AOI limit.
  */
 
-import { CONFIG } from '@server/config';
+import { CONFIG } from '../../config';
 
 const EARTH_RADIUS_METERS = 6371000;
 const SQ_METERS_PER_SQ_MILE = 2589988.11;

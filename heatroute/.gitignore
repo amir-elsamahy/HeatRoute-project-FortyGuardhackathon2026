@@ -12,6 +12,7 @@ dist-ssr/
 build/
 temp/
 coverage/
+api/*.js
 
 # Logs & Cache
 *.log
