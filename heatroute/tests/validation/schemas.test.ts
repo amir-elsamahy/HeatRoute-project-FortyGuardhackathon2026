@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { LatLngSchema, AnalyzeRequestSchema, GeocodeQuerySchema } from '@server/services/fortyguard/schemas';
+import { LatLngSchema, AnalyzeRequestSchema, GeocodeQuerySchema } from '../../server/services/fortyguard/schemas';
 
 describe('Zod Validation and US Prefilter Bounds Tests', () => {
   describe('LatLngSchema', () => {

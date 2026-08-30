@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculatePolygonAreaSqMiles, validateAoiArea } from '@server/services/routing/area';
+import { calculatePolygonAreaSqMiles, validateAoiArea } from '../../server/services/routing/area';
 
 describe('Polygon Area and AOI Validation Tests', () => {
   it('returns 0 area for rings with fewer than 3 points', () => {

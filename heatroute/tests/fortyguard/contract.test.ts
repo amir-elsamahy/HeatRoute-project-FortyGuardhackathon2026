@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import type { RawSubmissionResponse, RawStatusResponse } from '@server/services/fortyguard/types';
-import { parseHeatmapResult } from '@server/services/fortyguard/parser';
-import { FortyGuardError } from '@server/services/fortyguard/errors';
-import { AnalysisRequestBudget } from '@server/services/fortyguard/client';
+import type { RawSubmissionResponse, RawStatusResponse } from '../../server/services/fortyguard/types';
+import { parseHeatmapResult } from '../../server/services/fortyguard/parser';
+import { FortyGuardError } from '../../server/services/fortyguard/errors';
+import { AnalysisRequestBudget } from '../../server/services/fortyguard/client';
 
 describe('FortyGuard API Contract Tests', () => {
   it('validates submission response shape with activity_id', () => {

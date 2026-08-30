@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { parseHeatmapResult } from '@server/services/fortyguard/parser';
-import type { RawStatusResponse } from '@server/services/fortyguard/types';
+import { parseHeatmapResult } from '../../server/services/fortyguard/parser';
+import type { RawStatusResponse } from '../../server/services/fortyguard/types';
 
 describe('FortyGuard Parser Tests', () => {
   it('correctly extracts Temperature_stats fields', () => {

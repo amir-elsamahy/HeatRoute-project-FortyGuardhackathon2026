@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { sampleRoutePoints, buildCorridorPolygon } from '@server/services/routing/sampling';
-import type { RouteGeometry } from '@server/services/routing/osrm';
+import { sampleRoutePoints, buildCorridorPolygon } from '../../server/services/routing/sampling';
+import type { RouteGeometry } from '../../server/services/routing/osrm';
 
 function makeMockGeometry(pointCount: number): RouteGeometry {
   const coordinates = [];

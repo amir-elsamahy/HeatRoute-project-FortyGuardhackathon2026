@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { scoreRoutes, normalize, type RouteMetrics } from '@server/services/scoring/heatScore';
+import { scoreRoutes, normalize, type RouteMetrics } from '../../server/services/scoring/heatScore';
 
 function makeMockRouteMetrics(
   routeId: string,

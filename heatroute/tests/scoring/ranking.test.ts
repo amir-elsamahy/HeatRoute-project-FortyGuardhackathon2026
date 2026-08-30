@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { scoreRoutes, type RouteMetrics } from '@server/services/scoring/heatScore';
-import { rankRoutes } from '@server/services/scoring/ranking';
-import type { CandidateRoute } from '@server/services/routing/osrm';
+import { scoreRoutes, type RouteMetrics } from '../../server/services/scoring/heatScore';
+import { rankRoutes } from '../../server/services/scoring/ranking';
+import type { CandidateRoute } from '../../server/services/routing/osrm';
 
 function makeMockCandidate(id: string, name: string, distanceMeters: number): CandidateRoute {
   return {
