@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "functions": {
+    "heatroute/api/index.ts": {
+      "runtime": "@vercel/node",
+      "maxDuration": 60,
+      "memory": 1024,
+      "includeFiles": "heatroute/server/**"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/heatroute/api/index.ts"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/heatroute/dist/index.html"
+    }
+  ],
+  "buildCommand": "cd heatroute && npm ci && npm run build",
+  "outputDirectory": "heatroute/dist"
+}
