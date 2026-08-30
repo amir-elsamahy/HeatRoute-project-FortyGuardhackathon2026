@@ -134,7 +134,7 @@ router.post('/', async (req: Request, res: Response) => {
     const formattedTime = `${analysisTime} (${formatHourAmPm(analysisTime)})`;
 
     const mappedRoutes = ranked.map((r) => {
-      const candidate = candidateMap.get(r.routeId)!;
+      const candidate = candidateMap.get(r.routeId);
       return {
         id: r.routeId,
         name: r.name,
@@ -149,7 +149,7 @@ router.post('/', async (req: Request, res: Response) => {
         minTemperatureCelsius: Math.round(r.observation.minTemperatureCelsius * 10) / 10,
         tileCount: r.observation.tileCount,
         activityId: r.observation.activityId,
-        geometry: candidate.geometry,
+        geometry: candidate?.geometry || { coordinates: [] },
         components: r.components,
       };
     });
@@ -180,8 +180,11 @@ router.post('/', async (req: Request, res: Response) => {
       },
     };
 
+    const topRouteName = recommendation?.routeName || ranked[0]?.name || 'Route';
+    const topScore = ranked[0]?.heatScore !== null && ranked[0]?.heatScore !== undefined ? `Score: ${ranked[0].heatScore}/100` : 'Single Route - No Score';
+
     console.info(
-      `[/api/analyze] Analysis completed in ${Date.now() - startMs}ms. Comparison: ${recommendation.comparisonAvailable ? 'Multi-Route' : 'Single-Route'}. Result: ${recommendation.routeName || ranked[0].name} (${ranked[0].heatScore !== null ? `Score: ${ranked[0].heatScore}/100` : 'Single Route - No Score'})`,
+      `[/api/analyze] Analysis completed in ${Date.now() - startMs}ms. Comparison: ${recommendation?.comparisonAvailable ? 'Multi-Route' : 'Single-Route'}. Result: ${topRouteName} (${topScore})`,
     );
 
     res.status(200).json(response);

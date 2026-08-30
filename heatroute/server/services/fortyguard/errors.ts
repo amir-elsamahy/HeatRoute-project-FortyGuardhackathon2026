@@ -80,7 +80,7 @@ export function toUserFacingMessage(err: unknown): string {
     return 'Analysis request budget limit reached. Please wait a moment and try again.';
   }
   if (err instanceof FortyGuardAuthError) {
-    return 'Thermal intelligence service is not configured correctly on the server.';
+    return 'FortyGuard authentication failed. Please verify that FORTYGUARD_API_KEY is configured in Vercel Environment Variables.';
   }
   if (err instanceof FortyGuardRateLimitError) {
     return 'Too many heat analysis requests were submitted. Please wait a moment and retry.';
@@ -92,12 +92,13 @@ export function toUserFacingMessage(err: unknown): string {
     return 'Heat intelligence analysis could not be completed for this route corridor.';
   }
   if (err instanceof FortyGuardError) {
-    return 'We were unable to retrieve heat intelligence for this route at this time.';
+    return err.message || 'We were unable to retrieve heat intelligence for this route at this time.';
   }
   if (err instanceof Error) {
     if (err.message.includes('No suitable route')) {
       return 'No suitable road route could be found between the chosen locations.';
     }
+    return err.message;
   }
   return 'An unexpected error occurred during route heat analysis. Please try again.';
 }
