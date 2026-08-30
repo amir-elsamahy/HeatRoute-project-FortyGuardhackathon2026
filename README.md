@@ -378,6 +378,7 @@ npm run dev
 ## Vercel Deployment
 
 HeatRoute is ready for Vercel deployment:
+* **Root Directory**: In Vercel Project Settings $\rightarrow$ General, set **Root Directory** to `heatroute`.
 * **SPA Static Build**: Vite builds `src/` to `dist/`.
 * **Serverless Express API**: [`api/index.ts`](file:///d:/Downloads/hackathon/heatroute/api/index.ts) serves all `/api/*` routes.
 * **Rewrites**: [`vercel.json`](file:///d:/Downloads/hackathon/heatroute/vercel.json) routes API calls and handles SPA client-side routing.
