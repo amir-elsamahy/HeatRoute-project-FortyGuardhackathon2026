@@ -26,14 +26,8 @@ yarn-error.log*
 testsprite_tests/tmp/
 *.tmp
 
-# OS & Editor Artifacts
-.DS_Store
-Thumbs.db
-.vscode/
-!.vscode/extensions.json
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Ignored Reference Notebooks & Guidelines
+githubnotebooks/
+githubnotebook/
+*.ipynb
+
