@@ -1,0 +1,17 @@
+[
+  {
+    "id": "TC001",
+    "title": "test_geocode_endpoint_with_valid_and_invalid_queries",
+    "description": "Verify GET /api/geocode returns 200 with location suggestions and coordinates for valid queries, and returns 400 or 200 with no results for invalid queries, ensuring proper validation and user feedback."
+  },
+  {
+    "id": "TC002",
+    "title": "test_analyze_endpoint_with_various_input_scenarios",
+    "description": "Verify POST /api/analyze returns 200 with ranked route candidates and heat statistics for valid supported coordinates, returns 400 or 422 with controlled errors for unsupported or invalid coordinates, and handles route-not-found or analysis-limit errors gracefully with appropriate status codes and messages."
+  },
+  {
+    "id": "TC003",
+    "title": "test_health_endpoint_service_availability",
+    "description": "Verify GET /api/health returns 200 with healthy status when the service is running normally, and returns non-200 or unhealthy payload when the service is degraded, allowing frontend or monitoring systems to detect service availability."
+  }
+]

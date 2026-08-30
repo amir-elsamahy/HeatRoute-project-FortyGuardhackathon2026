@@ -1,0 +1,254 @@
+[
+  {
+    "id": "TC001",
+    "title": "Compare routes for two Alabama locations",
+    "description": "This verifies that a traveler can enter two supported Alabama locations and see a ranked route recommendation with heat exposure details and map overlays.",
+    "category": "Route Analysis and Thermal Decision Engine",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the origin location with a valid Alabama location"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the destination location with a valid Alabama location"
+      },
+      {
+        "type": "action",
+        "description": "Run the route analysis"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a recommended route is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify route comparison details are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Show a controlled error for unsupported locations",
+    "description": "This verifies that entering unsupported or invalid coordinates results in a safe error state without showing fabricated route or heat results.",
+    "category": "Route Analysis and Thermal Decision Engine",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the origin location with an unsupported location"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the destination location with a valid Alabama location"
+      },
+      {
+        "type": "action",
+        "description": "Run the route analysis"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a controlled error message is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no route recommendation is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Choose a suggested location from autocomplete",
+    "description": "This verifies that a user can search for a valid Alabama place and select a suggestion so the location is accepted for route analysis.",
+    "category": "Location Search and Geocoding",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the origin location with a valid Alabama search query"
+      },
+      {
+        "type": "action",
+        "description": "Wait for location suggestions to appear"
+      },
+      {
+        "type": "action",
+        "description": "Select a suggested origin location"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected origin location is accepted"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify usable location coordinates are available for analysis"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Display candidate routes before selecting the recommended one",
+    "description": "This verifies that the app shows multiple route options and explains why the recommended route is preferred by heat exposure.",
+    "category": "Route Analysis and Thermal Decision Engine",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the origin location with a valid Alabama location"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the destination location with a valid Alabama location"
+      },
+      {
+        "type": "action",
+        "description": "Run the route analysis"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify multiple candidate route cards are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a route explanation is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Use preset locations to start route analysis",
+    "description": "This verifies that a casual user can choose preset Alabama locations and run a route comparison without manual searching.",
+    "category": "Route Analysis and Thermal Decision Engine",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Open the preset location selector"
+      },
+      {
+        "type": "action",
+        "description": "Choose a preset origin location"
+      },
+      {
+        "type": "action",
+        "description": "Choose a preset destination location"
+      },
+      {
+        "type": "action",
+        "description": "Run the route analysis"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a route recommendation is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify route cards are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Show a route-not-found or analysis-limit error",
+    "description": "This verifies that when analysis cannot produce a route, the user sees a controlled failure message instead of route results.",
+    "category": "Route Analysis and Thermal Decision Engine",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the origin location with a valid Alabama location"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the destination location with a valid Alabama location"
+      },
+      {
+        "type": "action",
+        "description": "Run the route analysis"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a route-not-found or analysis-limit message is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no heat exposure results are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC007",
+    "title": "Show a no-results message for an invalid location search",
+    "description": "This verifies that a user searching with an invalid location query sees a validation or no-results message instead of an accepted location.",
+    "category": "Location Search and Geocoding",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the origin location with an invalid query"
+      },
+      {
+        "type": "action",
+        "description": "Wait for location search to complete"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a validation or no-results message is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no selectable location is accepted"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC008",
+    "title": "Confirm service readiness on the health check page",
+    "description": "This verifies that a developer or operator can open the health check route and confirm the backend is reported as healthy.",
+    "category": "Service Health Check",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /health"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the service health status is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the backend is reported as healthy"
+      }
+    ],
+    "priority": "Medium"
+  }
+]
