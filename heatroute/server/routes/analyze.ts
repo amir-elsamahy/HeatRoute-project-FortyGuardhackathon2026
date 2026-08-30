@@ -81,34 +81,40 @@ router.post('/', async (req: Request, res: Response) => {
     const analysisDate = parseResult.data.date || defaultDateTime.date;
     const analysisTime = parseResult.data.time || defaultDateTime.time;
 
-    // 4. FortyGuard Thermal Analysis for each candidate corridor
+    // 4. FortyGuard Thermal Analysis for each candidate corridor in parallel
     // Hard upper-bound budget per analysis (MAX_FORTYGUARD_REQUESTS_PER_ANALYSIS)
     const budgetTracker = new AnalysisRequestBudget(CONFIG.fortyguard.budgets.maxTotalRequestsPerAnalysis);
+
+    const analysisPromises = routesToAnalyze.map(async (route) => {
+      console.info(`[/api/analyze] Generating corridor polygon for ${route.name} (${route.id})...`);
+      const polygonAoi = buildCorridorPolygon(route.geometry);
+
+      console.info(`[/api/analyze] Calling FortyGuard single-hour heatmap for ${route.id}...`);
+      const observation = await analyseCorridorHeat(polygonAoi, analysisDate, analysisTime, budgetTracker);
+
+      return {
+        routeId: route.id,
+        distanceMeters: route.distanceMeters,
+        durationSeconds: route.durationSeconds,
+        observation,
+      };
+    });
+
+    const settledResults = await Promise.allSettled(analysisPromises);
     const routeMetrics: RouteMetrics[] = [];
     const failedRoutes: string[] = [];
 
-    for (let i = 0; i < routesToAnalyze.length; i++) {
-      const route = routesToAnalyze[i];
-      try {
-        console.info(`[/api/analyze] Generating corridor polygon for ${route.name} (${route.id})...`);
-        const polygonAoi = buildCorridorPolygon(route.geometry);
-
-        console.info(`[/api/analyze] Calling FortyGuard single-hour heatmap for ${route.id}...`);
-        const observation = await analyseCorridorHeat(polygonAoi, analysisDate, analysisTime, budgetTracker);
-
-        routeMetrics.push({
-          routeId: route.id,
-          distanceMeters: route.distanceMeters,
-          durationSeconds: route.durationSeconds,
-          observation,
-        });
-      } catch (err) {
+    settledResults.forEach((result, idx) => {
+      const route = routesToAnalyze[idx];
+      if (result.status === 'fulfilled') {
+        routeMetrics.push(result.value);
+      } else {
         console.warn(
-          `[/api/analyze] Route ${route.id} analysis failed: ${err instanceof Error ? err.message : String(err)}`,
+          `[/api/analyze] Route ${route.id} analysis failed: ${result.reason instanceof Error ? result.reason.message : String(result.reason)}`,
         );
         failedRoutes.push(route.id);
       }
-    }
+    });
 
     if (routeMetrics.length === 0) {
       throw new FortyGuardError(

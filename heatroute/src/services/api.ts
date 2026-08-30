@@ -34,7 +34,14 @@ export async function fetchRouteAnalysis(
     signal: options?.signal,
   });
 
-  const data = await response.json();
+  let data: any;
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    data = await response.json().catch(() => ({}));
+  } else {
+    const text = await response.text().catch(() => '');
+    data = { message: text || `Analysis failed (HTTP ${response.status})` };
+  }
 
   if (!response.ok || data.error) {
     throw new Error(data.message || `Analysis failed (HTTP ${response.status})`);
