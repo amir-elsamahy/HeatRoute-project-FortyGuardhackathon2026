@@ -4,6 +4,10 @@
 
 import type { LatLng, AnalyzeResponse } from '@/types';
 
+// Use VITE_API_URL if provided (e.g. deployed on Vercel pointing to Render backend),
+// otherwise default to empty string for relative paths in local development.
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+
 export interface GeocodeSuggestion {
   lat: number;
   lng: number;
@@ -19,7 +23,7 @@ export async function fetchRouteAnalysis(
     signal?: AbortSignal;
   },
 ): Promise<AnalyzeResponse> {
-  const response = await fetch('/api/analyze', {
+  const response = await fetch(`${API_BASE_URL}/api/analyze`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -56,7 +60,7 @@ export async function searchLocations(
 ): Promise<GeocodeSuggestion[]> {
   if (!query || query.trim().length < 3) return [];
 
-  const response = await fetch(`/api/geocode?q=${encodeURIComponent(query.trim())}`, {
+  const response = await fetch(`${API_BASE_URL}/api/geocode?q=${encodeURIComponent(query.trim())}`, {
     signal,
     headers: {
       Accept: 'application/json',
@@ -74,3 +78,4 @@ export async function searchLocations(
 
   return (data as GeocodeSuggestion[]) || [];
 }
+
