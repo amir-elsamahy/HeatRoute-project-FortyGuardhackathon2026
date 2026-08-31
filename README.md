@@ -14,9 +14,13 @@
 
 ## Live Demo & Deployment
 
-🚀 **Frontend (Vercel):** Connect your GitHub repository to Vercel (Root Directory: `heatroute`, set `VITE_API_URL=https://your-backend.onrender.com`).  
-⚡ **Backend API (Render):** Deployed on a persistent Node.js Web Service (e.g., `https://heatroute-api.onrender.com`).
+⬡ **Live App:** [HeatRoute on Vercel](https://heat-route-project-forty-guardhacka.vercel.app/)
 
+---
+
+### How to Deploy Your Own Instance
+* **Frontend (Vercel):** Connect your GitHub repository to Vercel (Root Directory: `heatroute`). Add the environment variable `VITE_API_URL=https://heatroute-api.onrender.com`.
+* **Backend API (Render):** Deploy the Node.js/Express server as a Web Service. Ensure you add your `FORTYGUARD_API_KEY` to the Render environment variables.
 ---
 
 ## What is HeatRoute?
