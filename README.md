@@ -8,15 +8,14 @@
 [![React](https://img.shields.io/badge/React-19.2-61DAFB)](#)
 [![Vite](https://img.shields.io/badge/Vite-8.2-646CFF)](#)
 [![Express](https://img.shields.io/badge/Express-5.2-000000)](#)
-[![Tests](https://img.shields.io/badge/Vitest-33%20passed-22C55E)](#)
+[![Tests](https://img.shields.io/badge/Vitest-37%20passed-22C55E)](#)
 
 ---
 
-## Live Demo
+## Live Demo & Deployment
 
-🚀 **Vercel:** [Coming soon](YOUR_VERCEL_URL)
-
-*(Update this link after deploying to your Vercel project)*
+🚀 **Frontend (Vercel):** Connect your GitHub repository to Vercel (Root Directory: `heatroute`, set `VITE_API_URL=https://your-backend.onrender.com`).  
+⚡ **Backend API (Render):** Deployed on a persistent Node.js Web Service (e.g., `https://heatroute-api.onrender.com`).
 
 ---
 
@@ -72,10 +71,11 @@ Factual "Why This Route?" Tradeoff Recommendation
 3. **Route Sampling & Corridor Creation**: For each candidate route, 6 representative waypoints are extracted and buffered laterally by $200\text{m}$ to construct a closed GeoJSON corridor polygon ring.
 4. **AOI Geodesic Area Validation**: The polygon surface area is calculated using spherical excess trigonometry to ensure it complies with HeatRoute's configured area limits. HeatRoute currently uses a conservative 10 sq mi AOI limit for this project configuration; the applicable FortyGuard plan limit may differ by account.
 5. **FortyGuard Heatmap Submission**: HeatRoute submits the corridor polygon to FortyGuard (`POST /v1/heatmap`) with `analytic_type: "tcm"`, `granularity: 100`, `filter_type: 1`, and the selected target hour.
-6. **Async Bounded Polling**: The backend polls `GET /v1/status/<ACTIVITY_ID>` every 3 seconds until status transitions from `Processing` to `Completed` (enforcing a hard request budget).
+6. **Async Bounded Polling (Takes ~25 to 40 seconds)**: The backend polls `GET /v1/status/<ACTIVITY_ID>` every 3 seconds until FortyGuard finishes generating the high-resolution thermal raster tiles (status transitions from `Processing` to `Completed`). **Note:** Generating and retrieving thermal microclimate data for candidate route corridors takes approximately **25 to 40 seconds** across the asynchronous pipeline.
 7. **Thermal Extraction**: The parser normalizes `stats_data.Temperature_stats`, extracting FortyGuard LTM temperature intelligence (`Mean`, `Maximum in analyzed hour`, and `Minimum` temperatures in °C).
 8. **Scoring & Ranking**: When multiple routes exist, candidates are normalized across temperature and distance dimensions to compute the Heat Exposure Score.
 9. **Factual Recommendation**: The winner is surfaced with explicit delta metrics (e.g., 0.1°C lower mean temperature, 0.4°C lower maximum temperature in the analyzed hour , 6.6 km shorter"*).
+
 
 ---
 
@@ -359,7 +359,7 @@ npm run dev
 
 ## Testing & Quality Assurance
 
-### Automated Vitest Suite (33 Tests Passed)
+### Automated Vitest Suite (37 Tests Passed)
 * `tests/fortyguard/contract.test.ts` (7 tests): FortyGuard API task lifecycle, schema validation, polling states.
 * `tests/fortyguard/parser.test.ts` (3 tests): Multi-casing parsing, missing value handling, feature fallbacks.
 * `tests/routing/area.test.ts` (4 tests): Spherical excess geodesic area calculations and boundary checks.
@@ -367,6 +367,7 @@ npm run dev
 * `tests/scoring/heatScore.test.ts` (7 tests): Min-max normalization math, division-by-zero guards, determinism.
 * `tests/scoring/ranking.test.ts` (2 tests): Route sorting, tradeoff differentials, rationale text generation.
 * `tests/validation/schemas.test.ts` (7 tests): Zod coordinate schemas, US bounds prefilters, negative query rejection.
+* `tests/api/serverlessEntrypoint.test.ts` (4 tests): Serverless endpoints, payload validation, and CORS.
 
 ### TestSprite End-to-End Validation
 * **TC001 (Geocoding Endpoint)**: Valid and invalid location queries and suggestions.
@@ -375,20 +376,31 @@ npm run dev
 
 ---
 
-## Vercel Deployment
+## Production Deployment
 
-HeatRoute is ready for Vercel deployment:
-* **Root Directory**: In Vercel Project Settings $\rightarrow$ General, set **Root Directory** to `heatroute`.
-* **SPA Static Build**: Vite builds `src/` to `dist/`.
-* **Serverless Express API**: [`api/index.ts`](file:///d:/Downloads/hackathon/heatroute/api/index.ts) serves all `/api/*` routes.
-* **Rewrites**: [`vercel.json`](file:///d:/Downloads/hackathon/heatroute/vercel.json) routes API calls and handles SPA client-side routing.
-* **Environment Variable**: Set `FORTYGUARD_API_KEY` in Vercel Project Settings $\rightarrow$ Environment Variables.
+HeatRoute uses a modern, resilient full-stack deployment:
+
+### 1. Backend API on Render (Persistent Server)
+* **Platform**: [Render.com](https://render.com) (Free Web Service)
+* **Root Directory**: `heatroute`
+* **Runtime**: `Node`
+* **Build Command**: `npm install`
+* **Start Command**: `npm run start`
+* **Environment Variable**: `FORTYGUARD_API_KEY=your_key`
+* **Advantage**: Persistent process supports the 25–40 second FortyGuard asynchronous polling without serverless function timeout limits.
+
+### 2. Frontend Client on Vercel (Edge CDN)
+* **Platform**: [Vercel.com](https://vercel.com) (Vite SPA)
+* **Root Directory**: `heatroute`
+* **Build Command**: `npm run build`
+* **Output Directory**: `dist`
+* **Environment Variable**: `VITE_API_URL=https://heatroute-api.onrender.com`
 
 ---
 
-## Known Limitations
+## Known Limitations & Performance
 
-1. **Upstream FortyGuard Async Latency**: Generating 100m TCM heatmaps takes ~20–30s per corridor. Total multi-route analysis is 40–60s.
+1. **Upstream FortyGuard Async Latency**: Calling the FortyGuard thermal analysis API along route corridors takes approximately **25 to 40 seconds** to generate 100m TCM raster tiles and complete status polling. The frontend UI provides an animated progressive step tracker while the asynchronous analysis completes.
 2. **Physical Road Network Dependencies**: In corridors with only one highway, OSRM legitimately returns 1 route; HeatRoute treats these as single routes rather than generating unrealistic artificial detours.
 3. **Public OSRM & Nominatim Demo Servers**: Subject to public server rate limits; enterprise setups should use dedicated instances.
 4. **Oversized Corridors**: Corridors exceeding HeatRoute's configured AOI limit are rejected. The current project configuration uses a conservative 10 sq mi limit; the applicable FortyGuard plan limit may differ by account.
@@ -402,19 +414,22 @@ HeatRoute is ready for Vercel deployment:
 1. Select the **"Mobile: Downtown → Spring Hill"** preset (or type custom Alabama locations).
 2. Select target time (e.g., **2:00 PM Afternoon**).
 3. Click **"Analyze Cool Routes"**.
-4. Observe the progressive technical status tracker (Routing $\rightarrow$ Corridor $\rightarrow$ FortyGuard $\rightarrow$ Scoring).
+4. Observe the progressive technical status tracker (takes ~25 to 40 seconds for thermal computation).
 5. Inspect the interactive map with colored route polylines and contrast casing.
 6. Compare FortyGuard temperature statistics (`Mean`, `Max in hour`, `Min`) and review the **"Why This Route?"** decision summary.
 
 ---
 
-## Screenshots
+## Visual Tour & Screenshots
 
-### Multi-Route Evaluation & Thermal Footprint
-<!-- Add screenshot: docs/screenshots/multi_route_comparison.png -->
+### 1. Multi-Route Evaluation & Thermal Footprint
+![HeatRoute Multi-Route Analysis](showcase.png)
 
-### How HeatRoute Works — 4-Step Decision Pipeline
-<!-- Add screenshot: docs/screenshots/how_it_works_modal.png -->
+### 2. Route Tradeoffs & Detailed Temperature Statistics
+![Route Details & Tradeoff Comparison](showcase2.png)
+
+### 3. How HeatRoute Works — 4-Step Decision Pipeline
+![How HeatRoute Works Modal](howitworks.png)
 
 ---
 
@@ -448,7 +463,7 @@ HeatRoute-FortyGuardhackathon/
     │   │   └── ui/                # LoadingSteps, ErrorBanner, TimeBadge
     │   ├── services/api.ts        # Typed client API service
     │   └── styles/index.css       # Design tokens & typography (Outfit & Plus Jakarta Sans)
-    ├── tests/                     # Automated Vitest Test Suite (33 tests)
+    ├── tests/                     # Automated Vitest Test Suite (37 tests)
     ├── testsprite_tests/          # TestSprite PRD, test plans, and release reports
     ├── vercel.json                # Vercel deployment routing configuration
     ├── package.json               # Dependencies & scripts
